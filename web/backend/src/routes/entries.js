@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import mongoose from 'mongoose'
 import Entry from '../models/Entry.js'
 import User from '../models/User.js'
 
@@ -21,6 +22,12 @@ router.post('/', async (req, res, next) => {
     if (!title || !body || !authorId) {
       return res.status(400).json({
         message: 'Title, body, and authorId are required.',
+      })
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(authorId)) {
+      return res.status(400).json({
+        message: 'authorId must be a valid ObjectId.',
       })
     }
 
