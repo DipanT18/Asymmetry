@@ -8,6 +8,7 @@
 
 ### Frontend
 - `npm install` then `npm run dev` inside `web/frontend/vite-project`
+- Optional: set `VITE_BACKEND_URL` in `web/frontend/vite-project/.env` to override the proxy target
 
 ## Data flow
 - The frontend calls `/api/*` routes. Vite proxies these requests to the backend during development.
