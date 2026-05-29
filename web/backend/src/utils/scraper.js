@@ -38,6 +38,9 @@ const normalizeUrl = (inputUrl) => {
   if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
     throw createError(400, 'Only http and https urls are supported.')
   }
+  if (parsedUrl.username || parsedUrl.password) {
+    throw createError(400, 'Urls with credentials are not allowed.')
+  }
 
   return parsedUrl
 }
