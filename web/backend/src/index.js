@@ -1,9 +1,9 @@
 import app from './app.js'
-import { connectDatabase } from './db.js'
+import { connectDB } from './db/index.db.js'
 import { PORT } from './constants.js'
 
 const startServer = async () => {
-  await connectDatabase()
+  await(connectDB())
   app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`)
   })

@@ -7,9 +7,10 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "dev": "node src/index.js",
-    "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon -r dotenv/config --experimental-json -modules src/index"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   },
   "dependencies": {
     "cheerio": "^1.2.0",

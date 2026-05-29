@@ -11,13 +11,17 @@ import {
   NODE_ENV,
 } from './constants.js'
 
+///Creating an express app
 const app = express()
+
+//Rate limiting
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 300,
   standardHeaders: true,
   legacyHeaders: false,
 })
+
 const publicLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 1000,
@@ -25,11 +29,13 @@ const publicLimiter = rateLimit({
   legacyHeaders: false,
 })
 
+//Assigning CORS origin as client's origin
 app.use(
   cors({
     origin: CLIENT_ORIGIN,
   }),
 )
+
 app.use(express.json())
 
 app.use('/api', apiLimiter, apiRouter)
