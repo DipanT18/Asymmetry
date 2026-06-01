@@ -5,15 +5,6 @@ import { scrapeWebsite } from '../utils/scraper.js'
 
 const router = Router()
 
-const parseOptionalNumber = (value, fieldName) => {
-  if (value === undefined || value === null || value === '') return undefined
-  const parsed = Number.parseInt(value, 10)
-  if (Number.isNaN(parsed) || parsed <= 0) {
-    throw new Error(`${fieldName} must be a positive integer.`)
-  }
-  return parsed
-}
-
 const parseBoolean = (value) => {
   if (value === true || value === 'true' || value === '1') return true
   if (value === false || value === 'false' || value === '0') return false
