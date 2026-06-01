@@ -1,4 +1,6 @@
 import { Router } from 'express'
+import { saveResult } from '../controllers/resultsController.js'
+import { classifyResult } from '../utils/classifier.js'
 import { scrapeWebsite } from '../utils/scraper.js'
 
 const router = Router()
@@ -26,6 +28,13 @@ const buildOptions = (source) => ({
   includeHtml: parseBoolean(source.includeHtml),
 })
 
+const parseOptionalString = (value) => {
+  if (Array.isArray(value)) return parseOptionalString(value[0])
+  if (typeof value !== 'string') return undefined
+  const normalized = value.trim()
+  return normalized || undefined
+}
+
 const normalizeValidationError = (error) => {
   if (error?.message?.includes('positive integer')) {
     error.statusCode = 400
@@ -42,7 +51,29 @@ const handleScrape = async (req, res, next) => {
     }
     const options = buildOptions(input)
     const data = await scrapeWebsite(url, options)
-    return res.json({ data })
+    const classification = classifyResult(data)
+    const shouldStore = parseBoolean(input?.store) === true
+    let storedResult
+
+    if (shouldStore) {
+      const source = parseOptionalString(input?.source)
+      const result = await saveResult({
+        ...data,
+        source,
+        resultType: classification.resultType,
+        classificationConfidence: classification.confidence,
+      })
+      storedResult = result.data
+    }
+
+    return res.json({
+      data: {
+        ...data,
+        resultType: classification.resultType,
+        classificationConfidence: classification.confidence,
+        ...(storedResult ? { storedResult } : {}),
+      },
+    })
   } catch (error) {
     normalizeValidationError(error)
     return next(error)
