@@ -6,7 +6,7 @@ const DEFAULT_TIMEOUT_MS = 15000
 const DEFAULT_MAX_TEXT_LENGTH = 12000
 const DEFAULT_MAX_LINKS = 75
 const DEFAULT_MAX_IMAGES = 40
-const USER_AGENT =
+const USER_AGENT = 
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36'
 
 const createError = (statusCode, message) => {
@@ -240,10 +240,13 @@ export const scrapeWebsite = async (inputUrl, options = {}) => {
   }
 
   if (!response.ok) {
-    throw createError(
-      502,
-      `Request failed with status ${response.status}.`,
-    )
+    if (response.status === 999) {
+      throw createError(
+        403,
+        'The target site blocked this request with LinkedIn status 999.',
+      )
+    }
+    throw createError(response.status, `Request failed with status ${response.status}.`)
   }
 
   const contentType = response.headers.get('content-type') ?? ''

@@ -38,7 +38,7 @@ Use Stitch as the source of truth for UI design and implement React screens from
 4. Add responsive behavior matching Stitch constraints.
 5. Validate with `npm run lint` and `npm run build`.
 
-### 4) Immediate next coding steps
+### 4) I    mmediate next coding steps
 - Replace the default Vite starter UI in `src/App.jsx` with app layout + routing shell.
 - Implement type-ordered results UI using backend result types (`hackathon`, `job`, `funding`, `scholarship`, `seminar`, `idea`).
 - Add loading/error/empty states for scraper and results pages.

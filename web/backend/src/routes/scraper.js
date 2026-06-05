@@ -11,6 +11,20 @@ const parseBoolean = (value) => {
   return undefined
 }
 
+const parseOptionalNumber = (value, fieldName) => {
+  if (Array.isArray(value)) return parseOptionalNumber(value[0], fieldName)
+  if (value === undefined || value === null || value === '') return undefined
+
+  const parsed = typeof value === 'number' ? value : Number(value)
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    const error = new Error(`${fieldName} must be a positive integer.`)
+    error.statusCode = 400
+    throw error
+  }
+
+  return parsed
+}
+
 const buildOptions = (source) => ({
   timeoutMs: parseOptionalNumber(source.timeoutMs, 'timeoutMs'),
   maxTextLength: parseOptionalNumber(source.maxTextLength, 'maxTextLength'),

@@ -1,15 +1,16 @@
 import app from './app.js'
-import { connectDB } from './db/index.db.js'
+import connectDB from './db/index.db.js'
 import { PORT } from './constants.js'
 
 const startServer = async () => {
-  await(connectDB())
-  app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`)
-  })
+    await connectDB()
+
+    app.listen(PORT, () => {
+        console.log(`Server is running at port: ${PORT}`)
+    })
 }
 
 startServer().catch((error) => {
-  console.error('Failed to start server:', error)
-  process.exit(1)
+    console.error('Failed to start server:', error)
+    process.exit(1)
 })
