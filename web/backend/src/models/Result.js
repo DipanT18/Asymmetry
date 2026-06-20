@@ -50,12 +50,25 @@ const resultSchema = new mongoose.Schema(
       max: 1,
       default: 0.1,
     },
+
+    expiresAt: {
+      type: Date,
+      index: { expires: '0' }, // Automatically delete when this date passed
+    }
   },
   {
     timestamps: true,
   },
 )
 
+
 const Result = mongoose.model('Result', resultSchema)
+
+//Compound index for feed queries :type + newest first
+resultSchema.index({ resultType: 1, createdAt: -1 })
+
+//text index for search functionality
+resultSchema.index({title: 'text', description: 'text'})
+
 
 export default Result

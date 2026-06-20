@@ -153,11 +153,23 @@ const extractMetadata = ($, baseUrl) => {
 }
 
 const extractText = ($, maxTextLength) => {
-  const bodyText = normalizeWhitespace($('body').text() || '')
-  if (!bodyText) return null
-  return bodyText.length > maxTextLength
-    ? `${bodyText.slice(0, maxTextLength)}…`
-    : bodyText
+  const SELECTORS = ['main', 'article', '.content', '#content', 'body']
+
+  let rawText = ''
+
+  for (const selector of SELECTORS) {
+    const found = normalizeWhitespace($(selector).first().text() || '')
+    if (found) {
+      rawText = found
+      break  // use the first selector that returns text
+    }
+  }
+
+  if (!rawText) return null
+
+  return rawText.length > maxTextLength
+    ? `${rawText.slice(0, maxTextLength)}…`
+    : rawText
 }
 
 const extractLinks = ($, baseUrl, maxLinks) => {
